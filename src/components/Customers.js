@@ -32,7 +32,22 @@ const Customers = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [user]);
+
+    useEffect(() => {
+        if (user) {
+            fetchCustomers();
+        }
+    }, [user, fetchCustomers]);
+
+    useEffect(() => {
+        const filtered = customers.filter(customer =>
+            customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (customer.company && customer.company.toLowerCase().includes(searchTerm.toLowerCase()))
+        );
+        setFilteredCustomers(filtered);
+    }, [searchTerm, customers]);
 
     const deleteCustomer = async (id) => {
         if (window.confirm('Are you sure you want to delete this customer?')) {

@@ -251,7 +251,7 @@ const Leads = () => {
                                     <Edit size={16} />
                                 </Link>
                                 <button
-                                    onClick={() => deleteLead(lead.id)}
+                                    onClick={() => handleDelete(lead.id)}
                                     className="btn btn-danger"
                                     title="Delete Lead"
                                 >
