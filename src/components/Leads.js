@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Edit, Trash2, Search, TrendingUp } from 'lucide-react';
 import { supabase } from '../config/supabase';
@@ -13,23 +13,7 @@ const Leads = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
-    useEffect(() => {
-        if (user) {
-            fetchLeads();
-        }
-    }, [user]);
-
-    useEffect(() => {
-        const filtered = leads.filter(lead =>
-            lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            lead.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            (lead.company && lead.company.toLowerCase().includes(searchTerm.toLowerCase())) ||
-            (lead.source && lead.source.toLowerCase().includes(searchTerm.toLowerCase()))
-        );
-        setFilteredLeads(filtered);
-    }, [searchTerm, leads]);
-
-    const fetchLeads = async () => {
+    const fetchLeads = useCallback(async () => {
         try {
             setLoading(true);
             const { data, error } = await supabase
@@ -48,9 +32,25 @@ const Leads = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [user]);
 
-    const deleteLead = async (id) => {
+    useEffect(() => {
+        if (user) {
+            fetchLeads();
+        }
+    }, [user, fetchLeads]);
+
+    useEffect(() => {
+        const filtered = leads.filter(lead =>
+            lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            lead.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (lead.company && lead.company.toLowerCase().includes(searchTerm.toLowerCase())) ||
+            (lead.source && lead.source.toLowerCase().includes(searchTerm.toLowerCase()))
+        );
+        setFilteredLeads(filtered);
+    }, [searchTerm, leads]);
+
+    const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this lead?')) {
             try {
                 const { error } = await supabase

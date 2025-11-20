@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Save, ArrowLeft } from 'lucide-react';
 import { supabase } from '../config/supabase';
@@ -25,13 +25,7 @@ const ContactForm = () => {
         notes: ''
     });
 
-    useEffect(() => {
-        if (id && user) {
-            fetchContact();
-        }
-    }, [id, user]);
-
-    const fetchContact = async () => {
+    const fetchContact = useCallback(async () => {
         try {
             setLoading(true);
             const { data, error } = await supabase
@@ -63,7 +57,13 @@ const ContactForm = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [id, user]);
+
+    useEffect(() => {
+        if (id && user) {
+            fetchContact();
+        }
+    }, [id, user, fetchContact]);
 
     const handleChange = (e) => {
         setFormData({

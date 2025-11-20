@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Save, ArrowLeft } from 'lucide-react';
 import { supabase } from '../config/supabase';
@@ -26,13 +26,7 @@ const LeadForm = () => {
         timeline: ''
     });
 
-    useEffect(() => {
-        if (id && user) {
-            fetchLead();
-        }
-    }, [id, user]);
-
-    const fetchLead = async () => {
+    const fetchLead = useCallback(async () => {
         try {
             setLoading(true);
             const { data, error } = await supabase
@@ -65,7 +59,13 @@ const LeadForm = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [id, user]);
+
+    useEffect(() => {
+        if (id && user) {
+            fetchLead();
+        }
+    }, [id, user, fetchLead]);
 
     const handleChange = (e) => {
         setFormData({

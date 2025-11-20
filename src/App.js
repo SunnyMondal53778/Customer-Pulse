@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -21,17 +21,6 @@ import Profile from './components/Profile';
 import Chatbot from './components/Chatbot';
 import { initializeSampleData } from './data/sampleData';
 import PageTransition from './components/PageTransition';
-
-function AuthRoutes() {
-  return (
-    <PageTransition>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-      </Routes>
-    </PageTransition>
-  );
-}
 
 function App() {
   useEffect(() => {

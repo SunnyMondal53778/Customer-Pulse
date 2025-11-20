@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
 import {
-    Users, UserPlus, Phone, TrendingUp, Calendar, Target, Award, Activity,
-    UserCheck, UserCircle, BarChart2, UserPlus2, PhoneCall, Headphones
+    Users, TrendingUp, Calendar, Target, Award,
+    BarChart2, Headphones
 } from 'lucide-react';
 import { supabase } from '../config/supabase';
 import { useAuth } from '../context/AuthContext';
@@ -30,11 +30,52 @@ const Dashboard = () => {
     const [customersDataCache, setCustomersDataCache] = useState([]);
     const [leadsDataCache, setLeadsDataCache] = useState([]);
 
+    const fetchDashboardStats = useCallback(async () => {
+        try {
+            setLoading(true);
+            const [customersRes, leadsRes, contactsRes] = await Promise.all([
+                supabase.from('customers').select('*').eq('user_id', user.id),
+                supabase.from('leads').select('*').eq('user_id', user.id),
+                supabase.from('contacts').select('*').eq('user_id', user.id)
+            ]);
+
+            const customers = customersRes.data || [];
+            const leads = leadsRes.data || [];
+            const contacts = contactsRes.data || [];
+
+            setCustomersDataCache(customers);
+            setLeadsDataCache(leads);
+
+            const trends = calculateTrends(customers, leads, contacts);
+            const totalCustomers = customers.length;
+            const totalLeads = leads.length;
+            const conversionRate = totalCustomers + totalLeads > 0
+                ? Math.round((totalCustomers / (totalCustomers + totalLeads)) * 100)
+                : 0;
+
+            setStats({
+                totalCustomers,
+                totalLeads,
+                totalContacts: contacts.length,
+                conversionRate,
+                ...trends
+            });
+
+            generateMonthlyPerformanceData(customers, leads, chartPeriod);
+            generateLeadStatusData(leads, totalCustomers, chartPeriod);
+            generateRevenueTrendData(customers, chartPeriod);
+        } catch (error) {
+            console.error('Error fetching dashboard stats:', error);
+        } finally {
+            setLoading(false);
+        }
+    }, [user, chartPeriod]);
+
     useEffect(() => {
         if (user) {
             fetchDashboardStats();
         }
-    }, [user]);
+    }, [user, fetchDashboardStats]);
 
     useEffect(() => {
         if (customersDataCache.length > 0 || leadsDataCache.length > 0) {
@@ -42,6 +83,7 @@ const Dashboard = () => {
             generateLeadStatusData(leadsDataCache, customersDataCache.length, chartPeriod);
             generateRevenueTrendData(customersDataCache, chartPeriod);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [chartPeriod]);
 
     const calculateTrends = (customers, leads, contacts) => {

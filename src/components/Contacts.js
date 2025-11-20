@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Edit, Trash2, Search, Mail, Phone as PhoneIcon } from 'lucide-react';
 import { supabase } from '../config/supabase';
@@ -13,23 +13,7 @@ const Contacts = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
-    useEffect(() => {
-        if (user) {
-            fetchContacts();
-        }
-    }, [user]);
-
-    useEffect(() => {
-        const filtered = contacts.filter(contact =>
-            contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            contact.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            (contact.company && contact.company.toLowerCase().includes(searchTerm.toLowerCase())) ||
-            (contact.department && contact.department.toLowerCase().includes(searchTerm.toLowerCase()))
-        );
-        setFilteredContacts(filtered);
-    }, [searchTerm, contacts]);
-
-    const fetchContacts = async () => {
+    const fetchContacts = useCallback(async () => {
         try {
             setLoading(true);
             const { data, error } = await supabase
@@ -48,7 +32,23 @@ const Contacts = () => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [user]);
+
+    useEffect(() => {
+        if (user) {
+            fetchContacts();
+        }
+    }, [user, fetchContacts]);
+
+    useEffect(() => {
+        const filtered = contacts.filter(contact =>
+            contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            contact.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (contact.company && contact.company.toLowerCase().includes(searchTerm.toLowerCase())) ||
+            (contact.department && contact.department.toLowerCase().includes(searchTerm.toLowerCase()))
+        );
+        setFilteredContacts(filtered);
+    }, [searchTerm, contacts]);
 
     const deleteContact = async (id) => {
         if (window.confirm('Are you sure you want to delete this contact?')) {

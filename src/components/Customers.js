@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Edit, Trash2, Search } from 'lucide-react';
 import { supabase } from '../config/supabase';
@@ -13,22 +13,7 @@ const Customers = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
-    useEffect(() => {
-        if (user) {
-            fetchCustomers();
-        }
-    }, [user]);
-
-    useEffect(() => {
-        const filtered = customers.filter(customer =>
-            customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            (customer.company && customer.company.toLowerCase().includes(searchTerm.toLowerCase()))
-        );
-        setFilteredCustomers(filtered);
-    }, [searchTerm, customers]);
-
-    const fetchCustomers = async () => {
+    const fetchCustomers = useCallback(async () => {
         try {
             setLoading(true);
             const { data, error } = await supabase

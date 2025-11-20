@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { MessageCircle, X, Send, Loader } from 'lucide-react';
 import { supabase } from '../config/supabase';
 import { useAuth } from '../context/AuthContext';
@@ -24,21 +24,7 @@ const Chatbot = () => {
     });
     const messagesEndRef = useRef(null);
 
-    useEffect(() => {
-        if (user && isOpen) {
-            fetchUserData();
-        }
-    }, [user, isOpen]);
-
-    useEffect(() => {
-        scrollToBottom();
-    }, [messages]);
-
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    };
-
-    const fetchUserData = async () => {
+    const fetchUserData = useCallback(async () => {
         try {
             const [customersRes, leadsRes, contactsRes] = await Promise.all([
                 supabase.from('customers').select('*').eq('user_id', user.id),
@@ -54,6 +40,20 @@ const Chatbot = () => {
         } catch (error) {
             console.error('Error fetching user data:', error);
         }
+    }, [user]);
+
+    useEffect(() => {
+        if (user && isOpen) {
+            fetchUserData();
+        }
+    }, [user, isOpen, fetchUserData]);
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
 
     const analyzeQuery = (query) => {
@@ -240,12 +240,12 @@ const Chatbot = () => {
 
         // Phone queries
         if (lowerQuery.includes('phone') || lowerQuery.includes('number')) {
-            const phoneMatch = lowerQuery.match(/(\+?\d[\d\s\-\(\)]+)/);
+            const phoneMatch = lowerQuery.match(/(\+?\d[\d\s\-()]+)/);
             if (phoneMatch) {
-                const phone = phoneMatch[1].replace(/[\s\-\(\)]/g, '');
-                const customer = userData.customers.find(c => c.phone && c.phone.replace(/[\s\-\(\)]/g, '').includes(phone));
-                const lead = userData.leads.find(l => l.phone && l.phone.replace(/[\s\-\(\)]/g, '').includes(phone));
-                const contact = userData.contacts.find(c => c.phone && c.phone.replace(/[\s\-\(\)]/g, '').includes(phone));
+                const phone = phoneMatch[1].replace(/[\s\-()]/g, '');
+                const customer = userData.customers.find(c => c.phone && c.phone.replace(/[\s\-()]/g, '').includes(phone));
+                const lead = userData.leads.find(l => l.phone && l.phone.replace(/[\s\-()]/g, '').includes(phone));
+                const contact = userData.contacts.find(c => c.phone && c.phone.replace(/[\s\-()]/g, '').includes(phone));
 
                 if (customer) {
                     return {
