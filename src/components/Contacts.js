@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, Edit, Trash2, Search, Mail, Phone as PhoneIcon } from 'lucide-react';
+import { Plus, Edit, Trash2, Search, Mail, Phone as PhoneIcon, Users, Building2, Briefcase, MapPin, Sparkles } from 'lucide-react';
 import { supabase } from '../config/supabase';
 import { useAuth } from '../context/AuthContext';
 import './Contacts.css';
@@ -79,10 +79,14 @@ const Contacts = () => {
         window.open(`tel:${phone}`, '_blank');
     };
 
+    // Get unique companies count
+    const uniqueCompanies = [...new Set(contacts.filter(c => c.company).map(c => c.company))].length;
+
     if (loading) {
         return (
             <div className="contacts">
                 <div className="loading-state">
+                    <div className="loading-spinner"></div>
                     <p>Loading contacts...</p>
                 </div>
             </div>
@@ -91,80 +95,184 @@ const Contacts = () => {
 
     return (
         <div className="contacts">
+            {/* Floating Particles Background */}
+            <div className="floating-particles">
+                <div className="particle"></div>
+                <div className="particle"></div>
+                <div className="particle"></div>
+                <div className="particle"></div>
+                <div className="particle"></div>
+            </div>
+
+            {/* Header Section */}
             <div className="contacts-header">
-                <h1>Contacts</h1>
+                <div className="header-content">
+                    <div className="header-icon">
+                        <Users size={28} />
+                    </div>
+                    <div className="header-text">
+                        <h1>Contacts</h1>
+                        <p className="header-subtitle">Manage your professional network</p>
+                    </div>
+                </div>
                 <Link to="/contacts/new" className="btn btn-primary">
                     <Plus size={20} />
-                    Add Contact
+                    <span>Add Contact</span>
                 </Link>
+            </div>
+
+            {/* Stats Section */}
+            <div className="contacts-stats">
+                <div className="stat-card">
+                    <div className="stat-icon users">
+                        <Users size={22} />
+                    </div>
+                    <div className="stat-content">
+                        <span className="stat-value">{contacts.length}</span>
+                        <span className="stat-label">Total Contacts</span>
+                    </div>
+                </div>
+                <div className="stat-card">
+                    <div className="stat-icon companies">
+                        <Building2 size={22} />
+                    </div>
+                    <div className="stat-content">
+                        <span className="stat-value">{uniqueCompanies}</span>
+                        <span className="stat-label">Companies</span>
+                    </div>
+                </div>
+                <div className="stat-card">
+                    <div className="stat-icon recent">
+                        <Sparkles size={22} />
+                    </div>
+                    <div className="stat-content">
+                        <span className="stat-value">{filteredContacts.length}</span>
+                        <span className="stat-label">Showing</span>
+                    </div>
+                </div>
             </div>
 
             {error && <div className="error-message">{error}</div>}
 
-            <div className="search-bar">
-                <Search size={20} />
-                <input
-                    type="text"
-                    placeholder="Search contacts..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                />
+            {/* Search Bar */}
+            <div className="search-container">
+                <div className="search-bar">
+                    <Search size={20} />
+                    <input
+                        type="text"
+                        placeholder="Search by name, email, company..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    {searchTerm && (
+                        <button className="clear-search" onClick={() => setSearchTerm('')}>
+                            ×
+                        </button>
+                    )}
+                </div>
             </div>
 
+            {/* Contacts Grid */}
             <div className="contacts-grid">
                 {filteredContacts.length === 0 ? (
                     <div className="empty-state">
-                        <p>No contacts found.</p>
+                        <div className="empty-icon">
+                            <Users size={64} />
+                        </div>
+                        <h3>No contacts found</h3>
+                        <p>Start building your network by adding your first contact</p>
                         <Link to="/contacts/new" className="btn btn-primary">
+                            <Plus size={20} />
                             Add Your First Contact
                         </Link>
                     </div>
                 ) : (
-                    filteredContacts.map(contact => (
-                        <div key={contact.id} className="contact-card">
-                            <div className="contact-avatar">
-                                {contact.name.split(' ').map(n => n[0]).join('').toUpperCase()}
-                            </div>
-                            <div className="contact-info">
-                                <h3>{contact.name}</h3>
-                                <p className="title">{contact.title}</p>
-                                <p className="company">{contact.company}</p>
-                                <p className="department">{contact.department}</p>
-                                <div className="contact-details">
-                                    <p className="email">{contact.email}</p>
-                                    <p className="phone">{contact.phone}</p>
+                    filteredContacts.map((contact, index) => (
+                        <div
+                            key={contact.id}
+                            className="contact-card"
+                            style={{ animationDelay: `${index * 0.05}s` }}
+                        >
+                            <div className="card-glow"></div>
+                            <div className="contact-header">
+                                <div className="contact-avatar">
+                                    <span>{contact.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)}</span>
+                                    <div className="avatar-ring"></div>
+                                </div>
+                                <div className="contact-primary">
+                                    <h3>{contact.name}</h3>
+                                    {contact.title && (
+                                        <p className="title">
+                                            <Briefcase size={14} />
+                                            {contact.title}
+                                        </p>
+                                    )}
                                 </div>
                             </div>
+
+                            <div className="contact-body">
+                                {contact.company && (
+                                    <div className="info-row company">
+                                        <Building2 size={15} />
+                                        <span>{contact.company}</span>
+                                    </div>
+                                )}
+                                {contact.department && (
+                                    <span className="department-badge">{contact.department}</span>
+                                )}
+
+                                <div className="contact-details">
+                                    {contact.email && (
+                                        <div className="info-row email">
+                                            <Mail size={14} />
+                                            <span>{contact.email}</span>
+                                        </div>
+                                    )}
+                                    {contact.phone && (
+                                        <div className="info-row phone">
+                                            <PhoneIcon size={14} />
+                                            <span>{contact.phone}</span>
+                                        </div>
+                                    )}
+                                    {contact.address && (
+                                        <div className="info-row address">
+                                            <MapPin size={14} />
+                                            <span>{contact.address}</span>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
                             <div className="contact-actions">
                                 <button
                                     onClick={() => sendEmail(contact.email)}
-                                    className="btn btn-info"
+                                    className="action-btn email"
                                     title="Send Email"
                                     disabled={!contact.email}
                                 >
-                                    <Mail size={16} />
+                                    <Mail size={18} />
                                 </button>
                                 <button
                                     onClick={() => makeCall(contact.phone)}
-                                    className="btn btn-success"
+                                    className="action-btn call"
                                     title="Make Call"
                                     disabled={!contact.phone}
                                 >
-                                    <PhoneIcon size={16} />
+                                    <PhoneIcon size={18} />
                                 </button>
                                 <Link
                                     to={`/contacts/edit/${contact.id}`}
-                                    className="btn btn-secondary"
+                                    className="action-btn edit"
                                     title="Edit Contact"
                                 >
-                                    <Edit size={16} />
+                                    <Edit size={18} />
                                 </Link>
                                 <button
                                     onClick={() => deleteContact(contact.id)}
-                                    className="btn btn-danger"
+                                    className="action-btn delete"
                                     title="Delete Contact"
                                 >
-                                    <Trash2 size={16} />
+                                    <Trash2 size={18} />
                                 </button>
                             </div>
                         </div>

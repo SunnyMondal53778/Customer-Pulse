@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
 import {
-    Users, TrendingUp, Calendar, Target, Award,
-    BarChart2, Headphones
+    Users, TrendingUp, TrendingDown, Calendar, Target, Award,
+    BarChart2, Headphones, Sparkles, ArrowUpRight, ArrowDownRight
 } from 'lucide-react';
 import { supabase } from '../config/supabase';
 import { useAuth } from '../context/AuthContext';
@@ -289,50 +289,59 @@ const Dashboard = () => {
 
             <div className="stats-grid">
                 <div className="customers-card">
+                    <div className="stat-icon customer-icon">
+                        <Users size={26} strokeWidth={2} />
+                    </div>
                     <div className="stat-content">
                         <h3>{stats.totalCustomers}</h3>
                         <p>Total Customers</p>
                         <div className={`stat-trend ${stats.customersTrend.isPositive ? 'positive' : 'negative'}`}>
-                            <TrendingUp size={10} />
+                            {stats.customersTrend.isPositive ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
                             <span>
                                 {stats.customersTrend.isPositive ? '+' : '-'}{stats.customersTrend.value}% this month
                             </span>
                         </div>
                     </div>
                     <div className="card-corner-icon">
-                        <Users size={16} />
+                        <Sparkles size={20} />
                     </div>
                 </div>
 
                 <div className="leads-card">
+                    <div className="stat-icon leads">
+                        <Target size={26} strokeWidth={2} />
+                    </div>
                     <div className="stat-content">
                         <h3>{stats.totalLeads}</h3>
                         <p>Active Leads</p>
                         <div className={`stat-trend ${stats.leadsTrend.isPositive ? 'positive' : 'negative'}`}>
-                            <TrendingUp size={10} />
+                            {stats.leadsTrend.isPositive ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
                             <span>
                                 {stats.leadsTrend.isPositive ? '+' : '-'}{stats.leadsTrend.value}% this month
                             </span>
                         </div>
                     </div>
                     <div className="card-corner-icon">
-                        <Target size={16} />
+                        <Sparkles size={20} />
                     </div>
                 </div>
 
                 <div className="contacts-card">
+                    <div className="stat-icon contacts">
+                        <Headphones size={26} strokeWidth={2} />
+                    </div>
                     <div className="stat-content">
                         <h3>{stats.totalContacts}</h3>
                         <p>Total Contacts</p>
                         <div className={`stat-trend ${stats.contactsTrend.isPositive ? 'positive' : 'negative'}`}>
-                            <TrendingUp size={10} />
+                            {stats.contactsTrend.isPositive ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
                             <span>
                                 {stats.contactsTrend.isPositive ? '+' : '-'}{stats.contactsTrend.value}% this month
                             </span>
                         </div>
                     </div>
                     <div className="card-corner-icon">
-                        <Headphones size={16} />
+                        <Sparkles size={20} />
                     </div>
                 </div>
 
@@ -344,14 +353,14 @@ const Dashboard = () => {
                         <h3>{stats.conversionRate}%</h3>
                         <p>Conversion Rate</p>
                         <div className={`stat-trend ${stats.conversionTrend.isPositive ? 'positive' : 'negative'}`}>
-                            <TrendingUp size={10} />
+                            {stats.conversionTrend.isPositive ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
                             <span>
                                 {stats.conversionTrend.isPositive ? '+' : '-'}{stats.conversionTrend.value}% vs last month
                             </span>
                         </div>
                     </div>
                     <div className="card-corner-icon">
-                        <BarChart2 size={16} />
+                        <Sparkles size={20} />
                     </div>
                 </div>
             </div>
@@ -382,11 +391,15 @@ const Dashboard = () => {
                             <YAxis stroke="#666" fontSize={12} />
                             <Tooltip
                                 contentStyle={{
-                                    backgroundColor: 'white',
-                                    border: '1px solid #e0e0e0',
-                                    borderRadius: '8px',
-                                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                                    backgroundColor: 'rgba(26, 26, 46, 0.95)',
+                                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                                    borderRadius: '12px',
+                                    boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+                                    color: '#fff',
+                                    backdropFilter: 'blur(10px)'
                                 }}
+                                labelStyle={{ color: 'rgba(255, 255, 255, 0.7)' }}
+                                itemStyle={{ color: '#fff' }}
                             />
                             <Bar dataKey="customers" fill="#667eea" name="Customers" radius={[4, 4, 0, 0]} />
                             <Bar dataKey="leads" fill="#43e97b" name="Leads" radius={[4, 4, 0, 0]} />
@@ -423,11 +436,15 @@ const Dashboard = () => {
                             </Pie>
                             <Tooltip
                                 contentStyle={{
-                                    backgroundColor: 'white',
-                                    border: '1px solid #e0e0e0',
-                                    borderRadius: '8px',
-                                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                                    backgroundColor: 'rgba(26, 26, 46, 0.95)',
+                                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                                    borderRadius: '12px',
+                                    boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+                                    color: '#fff',
+                                    backdropFilter: 'blur(10px)'
                                 }}
+                                labelStyle={{ color: 'rgba(255, 255, 255, 0.7)' }}
+                                itemStyle={{ color: '#fff' }}
                             />
                         </PieChart>
                     </ResponsiveContainer>
@@ -450,11 +467,15 @@ const Dashboard = () => {
                             <YAxis stroke="#666" fontSize={12} />
                             <Tooltip
                                 contentStyle={{
-                                    backgroundColor: 'white',
-                                    border: '1px solid #e0e0e0',
-                                    borderRadius: '8px',
-                                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                                    backgroundColor: 'rgba(26, 26, 46, 0.95)',
+                                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                                    borderRadius: '12px',
+                                    boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+                                    color: '#fff',
+                                    backdropFilter: 'blur(10px)'
                                 }}
+                                labelStyle={{ color: 'rgba(255, 255, 255, 0.7)' }}
+                                itemStyle={{ color: '#fff' }}
                                 formatter={(value) => [`$${value >= 1000 ? (value / 1000).toFixed(1) + 'K' : value}`, 'Revenue']}
                             />
                             <Line

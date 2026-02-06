@@ -1,190 +1,539 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* ============================================
+   CUSTOMERS PAGE - PREMIUM UI DESIGN
+   ============================================ */
+
 .customers {
-  padding: 1rem;
-  background: #f8f9fa;
-  min-height: auto;
-  max-height: calc(100vh - 80px);
-  overflow-y: auto;
+  padding: 1.5rem 2rem;
+  background: linear-gradient(135deg, #0f0c29 0%, #1a1a2e 50%, #16213e 100%);
+  min-height: calc(100vh - 80px);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  position: relative;
 }
 
-.customers-header {
+/* Animated Background Pattern */
+.customers::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(circle at 20% 80%, rgba(102, 126, 234, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(240, 147, 251, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(79, 172, 254, 0.08) 0%, transparent 40%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.customers>* {
+  position: relative;
+  z-index: 1;
+}
+
+/* Loading State */
+.customers .loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* ============================================
+   HEADER SECTION
+   ============================================ */
+
+.customers .customers-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 1.25rem 1.75rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  animation: slideDown 0.6s ease-out;
 }
 
-.customers-header h1 {
-  color: #333;
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.customers .customers-header h1 {
+  color: #fff;
   font-size: 1.75rem;
-  font-weight: 600;
+  font-weight: 700;
   margin: 0;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.8) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.btn {
-  padding: 0.5rem 1rem;
+/* ============================================
+   BUTTONS - Higher Specificity
+   ============================================ */
+
+.customers .btn {
+  padding: 0.7rem 1.25rem !important;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px !important;
   cursor: pointer;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-}
-
-.btn-secondary {
-  background: #6c757d;
-  color: white;
-}
-
-.btn-secondary:hover {
-  background: #5a6268;
-}
-
-.btn-danger {
-  background: #dc3545;
-  color: white;
-}
-
-.btn-danger:hover {
-  background: #c82333;
-}
-
-.search-bar {
+  font-weight: 600 !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.9rem !important;
   position: relative;
-  margin-bottom: 1rem;
-  max-width: 400px;
+  overflow: hidden;
 }
 
-.search-bar svg {
+.customers .btn::before {
+  content: '';
   position: absolute;
-  left: 1rem;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.customers .btn:hover::before {
+  left: 100%;
+}
+
+.customers .btn.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.customers .btn.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+}
+
+.customers .btn.btn-secondary {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.customers .btn.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  transform: translateY(-2px);
+}
+
+.customers .btn.btn-danger {
+  background: rgba(239, 68, 68, 0.2) !important;
+  color: #fc8181 !important;
+  border: 1px solid rgba(239, 68, 68, 0.3) !important;
+}
+
+.customers .btn.btn-danger:hover {
+  background: rgba(239, 68, 68, 0.3) !important;
+  border-color: rgba(239, 68, 68, 0.5) !important;
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   SEARCH BAR
+   ============================================ */
+
+.customers .search-bar {
+  position: relative;
+  margin-bottom: 1.5rem;
+  max-width: 450px;
+  animation: fadeInUp 0.6s ease-out 0.1s backwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.customers .search-bar svg {
+  position: absolute;
+  left: 1.25rem;
   top: 50%;
   transform: translateY(-50%);
-  color: #666;
+  color: rgba(255, 255, 255, 0.4);
+  transition: color 0.3s ease;
+  z-index: 1;
 }
 
-.search-bar input {
+.customers .search-bar:focus-within svg {
+  color: #667eea;
+}
+
+.customers .search-bar input {
   width: 100%;
-  padding: 0.75rem 0.75rem 0.75rem 3rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 1rem;
-  background: white;
+  padding: 1rem 1rem 1rem 3.25rem;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  color: #fff;
+  transition: all 0.3s ease;
 }
 
-.search-bar input:focus {
+.customers .search-bar input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.customers .search-bar input:focus {
   outline: none;
   border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
 }
 
-.customers-grid {
+/* ============================================
+   CUSTOMERS GRID
+   ============================================ */
+
+.customers .customers-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.25rem;
 }
 
-.customer-card {
-  background: white;
-  padding: 1rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
+/* ============================================
+   CUSTOMER CARD
+   ============================================ */
+
+.customers .customer-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 1.5rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.6s ease-out backwards;
+  box-shadow: none;
 }
 
-.customer-card:hover {
-  transform: translateY(-5px);
+.customers .customer-card:nth-child(1) {
+  animation-delay: 0.1s;
 }
 
-.customer-info h3 {
-  color: #333;
-  margin: 0 0 0.35rem 0;
-  font-size: 1.1rem;
-  font-weight: 600;
+.customers .customer-card:nth-child(2) {
+  animation-delay: 0.15s;
 }
 
-.customer-info .company {
+.customers .customer-card:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.customers .customer-card:nth-child(4) {
+  animation-delay: 0.25s;
+}
+
+.customers .customer-card:nth-child(5) {
+  animation-delay: 0.3s;
+}
+
+.customers .customer-card:nth-child(6) {
+  animation-delay: 0.35s;
+}
+
+/* Top gradient accent */
+.customers .customer-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+  border-radius: 20px 20px 0 0;
+}
+
+/* Glow effect on hover */
+.customers .customer-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(102, 126, 234, 0.2), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  border-radius: 20px;
+}
+
+.customers .customer-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.3),
+    0 0 40px rgba(102, 126, 234, 0.2);
+}
+
+.customers .customer-card:hover::after {
+  opacity: 1;
+}
+
+/* Customer Info */
+.customers .customer-info {
+  position: relative;
+  z-index: 1;
+}
+
+.customers .customer-info h3 {
+  color: #fff;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.customers .customer-info .company {
   color: #667eea;
-  font-weight: 500;
-  margin: 0 0 0.25rem 0;
-}
-
-.customer-info .email,
-.customer-info .phone {
-  color: #666;
-  margin: 0.25rem 0;
+  font-weight: 600;
+  margin: 0 0 0.75rem 0;
   font-size: 0.9rem;
 }
 
-.status {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
+.customers .customer-info .email,
+.customers .customer-info .phone {
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0.35rem 0;
+  font-size: 0.9rem;
+}
+
+/* Status Badge */
+.customers .status {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.9rem;
   border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 500;
+  font-size: 0.75rem;
+  font-weight: 600;
   text-transform: uppercase;
-  margin-top: 0.5rem;
+  letter-spacing: 0.05em;
+  margin-top: 0.75rem;
 }
 
-.status.active {
-  background: #d4edda;
-  color: #155724;
+.customers .status.active {
+  background: rgba(56, 161, 105, 0.2);
+  color: #68d391;
+  border: 1px solid rgba(56, 161, 105, 0.3);
 }
 
-.status.inactive {
-  background: #f8d7da;
-  color: #721c24;
+.customers .status.inactive {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fc8181;
+  border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
-.status.pending {
-  background: #fff3cd;
-  color: #856404;
+.customers .status.pending {
+  background: rgba(236, 201, 75, 0.2);
+  color: #f6e05e;
+  border: 1px solid rgba(236, 201, 75, 0.3);
 }
 
-.customer-actions {
+/* Customer Actions */
+.customers .customer-actions {
   display: flex;
-  gap: 0.5rem;
-  margin-top: 1rem;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   justify-content: flex-end;
+  position: relative;
+  z-index: 1;
 }
 
-.empty-state {
+.customers .customer-actions .btn {
+  padding: 0.6rem 1rem !important;
+  font-size: 0.85rem !important;
+}
+
+/* ============================================
+   EMPTY STATE
+   ============================================ */
+
+.customers .empty-state {
   grid-column: 1 / -1;
   text-align: center;
-  padding: 3rem;
+  padding: 4rem 2rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 24px;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
 }
 
-.empty-state p {
-  color: #666;
+.customers .empty-state p {
+  color: rgba(255, 255, 255, 0.6);
   font-size: 1.1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.customers .empty-state .btn {
+  margin: 0 auto;
+}
+
+/* ============================================
+   ERROR MESSAGE
+   ============================================ */
+
+.customers .error-message {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #fc8181;
+  font-weight: 500;
+  animation: shakeError 0.5s ease-out;
+}
+
+@keyframes shakeError {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translateX(-10px);
+  }
+
+  40% {
+    transform: translateX(10px);
+  }
+
+  60% {
+    transform: translateX(-5px);
+  }
+
+  80% {
+    transform: translateX(5px);
+  }
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 1024px) {
+  .customers {
+    padding: 1.25rem 1.5rem;
+  }
+
+  .customers .customers-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
 }
 
 @media (max-width: 768px) {
   .customers {
     padding: 1rem;
   }
-  
-  .customers-header {
+
+  .customers .customers-header {
     flex-direction: column;
     gap: 1rem;
-    align-items: stretch;
+    text-align: center;
+    padding: 1.25rem;
   }
-  
-  .customers-grid {
+
+  .customers .customers-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .customers .search-bar {
+    max-width: 100%;
+  }
+
+  .customers .customers-grid {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
+
+  .customers .customer-card {
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .customers {
+    padding: 0.75rem;
+  }
+
+  .customers .customers-header {
+    padding: 1rem;
+    border-radius: 16px;
+  }
+
+  .customers .customer-card {
+    border-radius: 16px;
+  }
+
+  .customers .customer-actions {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .customers .customer-actions .btn {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+/* ============================================
+   CUSTOM SCROLLBAR
+   ============================================ */
+
+.customers::-webkit-scrollbar {
+  width: 8px;
+}
+
+.customers::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.customers::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 4px;
+}
+
+.customers::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #5a6fd6 0%, #6a4190 100%);
 }
