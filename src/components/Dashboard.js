@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
 import {
-    Users, TrendingUp, TrendingDown, Calendar, Target, Award,
-    BarChart2, Headphones, Sparkles, ArrowUpRight, ArrowDownRight
+    Users, Calendar, Target, Award,
+    Headphones, Sparkles, ArrowUpRight, ArrowDownRight
 } from 'lucide-react';
 import { supabase } from '../config/supabase';
 import { useAuth } from '../context/AuthContext';
