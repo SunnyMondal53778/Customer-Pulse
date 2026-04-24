@@ -1,29 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 /* ============================================
-   CUSTOMERS PAGE - PREMIUM UI DESIGN
+   CUSTOMERS PAGE - PREMIUM THEME-AWARE DESIGN
    ============================================ */
 
 .customers {
   padding: 1.5rem 2rem;
-  background: linear-gradient(135deg, #0f0c29 0%, #1a1a2e 50%, #16213e 100%);
+  background: var(--bg-page);
   min-height: calc(100vh - 80px);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   position: relative;
 }
 
-/* Animated Background Pattern */
 .customers::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: 0; left: 0; right: 0; bottom: 0;
   background:
-    radial-gradient(circle at 20% 80%, rgba(102, 126, 234, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(240, 147, 251, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(79, 172, 254, 0.08) 0%, transparent 40%);
+    radial-gradient(circle at 20% 80%, rgba(102, 126, 234, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(240, 147, 251, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(79, 172, 254, 0.04) 0%, transparent 40%);
   pointer-events: none;
   z-index: 0;
 }
@@ -33,64 +29,46 @@
   z-index: 1;
 }
 
-/* Loading State */
 .customers .loading-state {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 400px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
   font-size: 1.1rem;
   font-weight: 500;
 }
 
-/* ============================================
-   HEADER SECTION
-   ============================================ */
-
+/* Header */
 .customers .customers-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-card);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   padding: 1.25rem 1.75rem;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  border-radius: var(--card-radius);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-md);
   animation: slideDown 0.6s ease-out;
 }
 
 @keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .customers .customers-header h1 {
-  color: #fff;
+  color: var(--text-primary);
   font-size: 1.75rem;
   font-weight: 700;
   margin: 0;
   letter-spacing: -0.5px;
-  background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.8) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
-/* ============================================
-   BUTTONS - Higher Specificity
-   ============================================ */
-
+/* Buttons */
 .customers .btn {
   padding: 0.7rem 1.25rem !important;
   border: none;
@@ -110,22 +88,18 @@
 .customers .btn::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
   transition: left 0.5s ease;
 }
 
-.customers .btn:hover::before {
-  left: 100%;
-}
+.customers .btn:hover::before { left: 100%; }
 
 .customers .btn.btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  background: var(--accent-gradient) !important;
   color: white !important;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: var(--shadow-accent);
 }
 
 .customers .btn.btn-primary:hover {
@@ -134,33 +108,30 @@
 }
 
 .customers .btn.btn-secondary {
-  background: rgba(255, 255, 255, 0.1) !important;
-  color: #fff !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  background: var(--bg-card) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
 }
 
 .customers .btn.btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.15) !important;
-  border-color: rgba(255, 255, 255, 0.3) !important;
+  background: var(--bg-card-hover) !important;
+  border-color: var(--border-hover) !important;
   transform: translateY(-2px);
 }
 
 .customers .btn.btn-danger {
-  background: rgba(239, 68, 68, 0.2) !important;
-  color: #fc8181 !important;
-  border: 1px solid rgba(239, 68, 68, 0.3) !important;
+  background: rgba(239, 68, 68, 0.15) !important;
+  color: #ef4444 !important;
+  border: 1px solid rgba(239, 68, 68, 0.25) !important;
 }
 
 .customers .btn.btn-danger:hover {
-  background: rgba(239, 68, 68, 0.3) !important;
-  border-color: rgba(239, 68, 68, 0.5) !important;
+  background: rgba(239, 68, 68, 0.25) !important;
+  border-color: rgba(239, 68, 68, 0.4) !important;
   transform: translateY(-2px);
 }
 
-/* ============================================
-   SEARCH BAR
-   ============================================ */
-
+/* Search Bar */
 .customers .search-bar {
   position: relative;
   margin-bottom: 1.5rem;
@@ -169,15 +140,8 @@
 }
 
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .customers .search-bar svg {
@@ -185,60 +149,54 @@
   left: 1.25rem;
   top: 50%;
   transform: translateY(-50%);
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-tertiary);
   transition: color 0.3s ease;
   z-index: 1;
 }
 
 .customers .search-bar:focus-within svg {
-  color: #667eea;
+  color: var(--accent-primary);
 }
 
 .customers .search-bar input {
   width: 100%;
   padding: 1rem 1rem 1rem 3.25rem;
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid var(--border-color);
   border-radius: 14px;
   font-size: 0.95rem;
   font-weight: 500;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-card);
   backdrop-filter: blur(10px);
-  color: #fff;
+  color: var(--text-primary);
   transition: all 0.3s ease;
 }
 
 .customers .search-bar input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-tertiary);
 }
 
 .customers .search-bar input:focus {
   outline: none;
-  border-color: #667eea;
-  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--accent-primary);
+  background: var(--bg-card-hover);
   box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
 }
 
-/* ============================================
-   CUSTOMERS GRID
-   ============================================ */
-
+/* Customers Grid */
 .customers .customers-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 1.25rem;
 }
 
-/* ============================================
-   CUSTOMER CARD
-   ============================================ */
-
+/* Customer Card */
 .customers .customer-card {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-card);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   padding: 1.5rem;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--card-radius);
+  border: 1px solid var(--border-color);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
@@ -246,68 +204,40 @@
   box-shadow: none;
 }
 
-.customers .customer-card:nth-child(1) {
-  animation-delay: 0.1s;
-}
+.customers .customer-card:nth-child(1) { animation-delay: 0.1s; }
+.customers .customer-card:nth-child(2) { animation-delay: 0.15s; }
+.customers .customer-card:nth-child(3) { animation-delay: 0.2s; }
+.customers .customer-card:nth-child(4) { animation-delay: 0.25s; }
+.customers .customer-card:nth-child(5) { animation-delay: 0.3s; }
+.customers .customer-card:nth-child(6) { animation-delay: 0.35s; }
 
-.customers .customer-card:nth-child(2) {
-  animation-delay: 0.15s;
-}
-
-.customers .customer-card:nth-child(3) {
-  animation-delay: 0.2s;
-}
-
-.customers .customer-card:nth-child(4) {
-  animation-delay: 0.25s;
-}
-
-.customers .customer-card:nth-child(5) {
-  animation-delay: 0.3s;
-}
-
-.customers .customer-card:nth-child(6) {
-  animation-delay: 0.35s;
-}
-
-/* Top gradient accent */
 .customers .customer-card::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 0; left: 0; right: 0;
   height: 3px;
   background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
-  border-radius: 20px 20px 0 0;
+  border-radius: var(--card-radius) var(--card-radius) 0 0;
 }
 
-/* Glow effect on hover */
 .customers .customer-card::after {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at 50% 0%, rgba(102, 126, 234, 0.2), transparent 70%);
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(102, 126, 234, 0.15), transparent 70%);
   opacity: 0;
   transition: opacity 0.4s ease;
   pointer-events: none;
-  border-radius: 20px;
+  border-radius: var(--card-radius);
 }
 
 .customers .customer-card:hover {
   transform: translateY(-8px) scale(1.02);
-  border-color: rgba(255, 255, 255, 0.2);
-  box-shadow:
-    0 20px 40px rgba(0, 0, 0, 0.3),
-    0 0 40px rgba(102, 126, 234, 0.2);
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-lg);
 }
 
-.customers .customer-card:hover::after {
-  opacity: 1;
-}
+.customers .customer-card:hover::after { opacity: 1; }
 
 /* Customer Info */
 .customers .customer-info {
@@ -316,7 +246,7 @@
 }
 
 .customers .customer-info h3 {
-  color: #fff;
+  color: var(--text-primary);
   margin: 0 0 0.5rem 0;
   font-size: 1.2rem;
   font-weight: 700;
@@ -324,7 +254,7 @@
 }
 
 .customers .customer-info .company {
-  color: #667eea;
+  color: var(--accent-primary);
   font-weight: 600;
   margin: 0 0 0.75rem 0;
   font-size: 0.9rem;
@@ -332,7 +262,7 @@
 
 .customers .customer-info .email,
 .customers .customer-info .phone {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary);
   margin: 0.35rem 0;
   font-size: 0.9rem;
 }
@@ -351,21 +281,21 @@
 }
 
 .customers .status.active {
-  background: rgba(56, 161, 105, 0.2);
-  color: #68d391;
-  border: 1px solid rgba(56, 161, 105, 0.3);
+  background: var(--status-active-bg);
+  color: var(--status-active-text);
+  border: 1px solid var(--status-active-border);
 }
 
 .customers .status.inactive {
-  background: rgba(239, 68, 68, 0.2);
-  color: #fc8181;
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: var(--status-inactive-bg);
+  color: var(--status-inactive-text);
+  border: 1px solid var(--status-inactive-border);
 }
 
 .customers .status.pending {
-  background: rgba(236, 201, 75, 0.2);
-  color: #f6e05e;
-  border: 1px solid rgba(236, 201, 75, 0.3);
+  background: var(--status-pending-bg);
+  color: var(--status-pending-text);
+  border: 1px solid var(--status-pending-border);
 }
 
 /* Customer Actions */
@@ -374,7 +304,7 @@
   gap: 0.75rem;
   margin-top: 1.25rem;
   padding-top: 1.25rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--border-color);
   justify-content: flex-end;
   position: relative;
   z-index: 1;
@@ -385,155 +315,74 @@
   font-size: 0.85rem !important;
 }
 
-/* ============================================
-   EMPTY STATE
-   ============================================ */
-
+/* Empty State */
 .customers .empty-state {
   grid-column: 1 / -1;
   text-align: center;
   padding: 4rem 2rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--bg-card);
   border-radius: 24px;
-  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border: 1px dashed var(--border-color);
 }
 
 .customers .empty-state p {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary);
   font-size: 1.1rem;
   margin-bottom: 1.5rem;
 }
 
-.customers .empty-state .btn {
-  margin: 0 auto;
-}
+.customers .empty-state .btn { margin: 0 auto; }
 
-/* ============================================
-   ERROR MESSAGE
-   ============================================ */
-
+/* Error Message */
 .customers .error-message {
-  background: rgba(239, 68, 68, 0.15);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.25);
   border-radius: 12px;
   padding: 1rem 1.5rem;
   margin-bottom: 1.5rem;
-  color: #fc8181;
+  color: var(--status-inactive-text);
   font-weight: 500;
   animation: shakeError 0.5s ease-out;
 }
 
 @keyframes shakeError {
-
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-
-  20% {
-    transform: translateX(-10px);
-  }
-
-  40% {
-    transform: translateX(10px);
-  }
-
-  60% {
-    transform: translateX(-5px);
-  }
-
-  80% {
-    transform: translateX(5px);
-  }
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-10px); }
+  40% { transform: translateX(10px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
 }
 
-/* ============================================
-   RESPONSIVE DESIGN
-   ============================================ */
-
+/* Responsive */
 @media (max-width: 1024px) {
-  .customers {
-    padding: 1.25rem 1.5rem;
-  }
-
-  .customers .customers-grid {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  }
+  .customers { padding: 1.25rem 1.5rem; }
+  .customers .customers-grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
 }
 
 @media (max-width: 768px) {
-  .customers {
-    padding: 1rem;
-  }
-
+  .customers { padding: 1rem; }
   .customers .customers-header {
     flex-direction: column;
     gap: 1rem;
     text-align: center;
     padding: 1.25rem;
   }
-
-  .customers .customers-header h1 {
-    font-size: 1.5rem;
-  }
-
-  .customers .search-bar {
-    max-width: 100%;
-  }
-
-  .customers .customers-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .customers .customer-card {
-    padding: 1.25rem;
-  }
+  .customers .customers-header h1 { font-size: 1.5rem; }
+  .customers .search-bar { max-width: 100%; }
+  .customers .customers-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .customers .customer-card { padding: 1.25rem; }
 }
 
 @media (max-width: 480px) {
-  .customers {
-    padding: 0.75rem;
-  }
-
-  .customers .customers-header {
-    padding: 1rem;
-    border-radius: 16px;
-  }
-
-  .customers .customer-card {
-    border-radius: 16px;
-  }
-
-  .customers .customer-actions {
-    flex-direction: row;
-    justify-content: center;
-  }
-
-  .customers .customer-actions .btn {
-    flex: 1;
-    justify-content: center;
-  }
+  .customers { padding: 0.75rem; }
+  .customers .customers-header { padding: 1rem; border-radius: 16px; }
+  .customers .customer-card { border-radius: 16px; }
+  .customers .customer-actions { flex-direction: row; justify-content: center; }
+  .customers .customer-actions .btn { flex: 1; justify-content: center; }
 }
 
-/* ============================================
-   CUSTOM SCROLLBAR
-   ============================================ */
-
-.customers::-webkit-scrollbar {
-  width: 8px;
-}
-
-.customers::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 4px;
-}
-
-.customers::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 4px;
-}
-
-.customers::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #5a6fd6 0%, #6a4190 100%);
-}
+/* Scrollbar */
+.customers::-webkit-scrollbar { width: 8px; }
+.customers::-webkit-scrollbar-track { background: var(--scrollbar-track); border-radius: 4px; }
+.customers::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 4px; }
+.customers::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, #5a6fd6 0%, #6a4190 100%); }

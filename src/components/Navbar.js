@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, Users, UserPlus, Phone, LogOut, User, ChevronDown } from 'lucide-react';
+import { Home, Users, UserPlus, Phone, LogOut, User, ChevronDown, Sun, Moon, Zap, CreditCard } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import Logo from './Logo';
 import './Navbar.css';
 
@@ -9,6 +10,7 @@ const Navbar = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { user, logout } = useAuth();
+    const { toggleTheme, isDark } = useTheme();
     const [showDropdown, setShowDropdown] = useState(false);
     const dropdownRef = useRef(null);
 
@@ -78,49 +80,79 @@ const Navbar = () => {
                         Contacts
                     </Link>
                 </li>
+                <li className={`nav-item ${isActive('/automation') ? 'active' : ''}`}>
+                    <Link to="/automation" className="nav-link">
+                        <Zap size={20} />
+                        Automation
+                    </Link>
+                </li>
             </ul>
-            <div className="navbar-user" ref={dropdownRef}>
-                <div
-                    className="user-profile"
-                    onClick={() => setShowDropdown(!showDropdown)}
+
+            <div className="navbar-actions">
+                {/* Theme Toggle */}
+                <button
+                    className="theme-toggle"
+                    onClick={toggleTheme}
+                    title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                    aria-label="Toggle theme"
                 >
-                    <div className="user-avatar">
-                        {getInitials(user?.name)}
+                    <div className="theme-toggle-inner">
+                        <Sun size={18} className={`theme-icon sun ${!isDark ? 'active' : ''}`} />
+                        <Moon size={18} className={`theme-icon moon ${isDark ? 'active' : ''}`} />
                     </div>
-                    <div className="user-info">
-                        <span className="user-name">{user?.name || 'User'}</span>
-                        <span className="user-email">{user?.email || ''}</span>
-                    </div>
-                    <ChevronDown size={18} className={`dropdown-icon ${showDropdown ? 'open' : ''}`} />
-                </div>
-                {showDropdown && (
-                    <div className="user-dropdown">
-                        <div className="dropdown-header">
-                            <div className="dropdown-avatar">
-                                {getInitials(user?.name)}
-                            </div>
-                            <div>
-                                <div className="dropdown-name">{user?.name}</div>
-                                <div className="dropdown-email">{user?.email}</div>
-                                {user?.company && (
-                                    <div className="dropdown-company">{user?.company}</div>
-                                )}
-                            </div>
+                </button>
+
+                {/* User Profile */}
+                <div className="navbar-user" ref={dropdownRef}>
+                    <div
+                        className="user-profile"
+                        onClick={() => setShowDropdown(!showDropdown)}
+                    >
+                        <div className="user-avatar">
+                            {getInitials(user?.name)}
                         </div>
-                        <div className="dropdown-divider"></div>
-                        <button className="dropdown-item" onClick={() => {
-                            navigate('/profile');
-                            setShowDropdown(false);
-                        }}>
-                            <User size={18} />
-                            <span>Profile Settings</span>
-                        </button>
-                        <button className="dropdown-item logout" onClick={handleLogout}>
-                            <LogOut size={18} />
-                            <span>Logout</span>
-                        </button>
+                        <div className="user-info">
+                            <span className="user-name">{user?.name || 'User'}</span>
+                            <span className="user-email">{user?.email || ''}</span>
+                        </div>
+                        <ChevronDown size={18} className={`dropdown-icon ${showDropdown ? 'open' : ''}`} />
                     </div>
-                )}
+                    {showDropdown && (
+                        <div className="user-dropdown">
+                            <div className="dropdown-header">
+                                <div className="dropdown-avatar">
+                                    {getInitials(user?.name)}
+                                </div>
+                                <div>
+                                    <div className="dropdown-name">{user?.name}</div>
+                                    <div className="dropdown-email">{user?.email}</div>
+                                    {user?.company && (
+                                        <div className="dropdown-company">{user?.company}</div>
+                                    )}
+                                </div>
+                            </div>
+                            <div className="dropdown-divider"></div>
+                            <button className="dropdown-item" onClick={() => {
+                                navigate('/profile');
+                                setShowDropdown(false);
+                            }}>
+                                <User size={18} />
+                                <span>Profile Settings</span>
+                            </button>
+                            <button className="dropdown-item" onClick={() => {
+                                navigate('/pricing');
+                                setShowDropdown(false);
+                            }}>
+                                <CreditCard size={18} />
+                                <span>Billing & Plans</span>
+                            </button>
+                            <button className="dropdown-item logout" onClick={handleLogout}>
+                                <LogOut size={18} />
+                                <span>Logout</span>
+                            </button>
+                        </div>
+                    )}
+                </div>
             </div>
         </nav>
     );

@@ -1,5 +1,151 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
+/* ============================================
+   DESIGN TOKENS — LIGHT / DARK THEMES
+   ============================================ */
+
+:root,
+[data-theme="light"] {
+  /* Backgrounds */
+  --bg-primary: #f4f7fb;
+  --bg-secondary: #ffffff;
+  --bg-page: linear-gradient(135deg, #f0f4ff 0%, #f7f8fc 50%, #eef2ff 100%);
+  --bg-card: rgba(255, 255, 255, 0.85);
+  --bg-card-hover: rgba(255, 255, 255, 0.95);
+  --bg-input: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  --bg-input-hover: #ffffff;
+  --bg-navbar: linear-gradient(135deg, rgba(255,255,255,0.92) 0%, rgba(248,250,255,0.95) 100%);
+  --bg-overlay: rgba(255, 255, 255, 0.05);
+  --bg-glass: rgba(255, 255, 255, 0.7);
+
+  /* Text */
+  --text-primary: #1a1a2e;
+  --text-secondary: #64748b;
+  --text-tertiary: #94a3b8;
+  --text-on-primary: #ffffff;
+
+  /* Borders */
+  --border-color: rgba(0, 0, 0, 0.08);
+  --border-hover: rgba(0, 0, 0, 0.15);
+  --border-focus: #667eea;
+
+  /* Accents */
+  --accent-primary: #667eea;
+  --accent-secondary: #764ba2;
+  --accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --accent-green: #10b981;
+  --accent-green-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  --accent-blue: #3b82f6;
+  --accent-blue-gradient: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  --accent-pink: #ec4899;
+  --accent-pink-gradient: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+  --accent-orange: #f59e0b;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.1);
+  --shadow-accent: 0 4px 15px rgba(102, 126, 234, 0.25);
+
+  /* Chart colors */
+  --chart-grid: rgba(0, 0, 0, 0.06);
+  --chart-text: #64748b;
+  --chart-tooltip-bg: rgba(26, 26, 46, 0.95);
+  --chart-tooltip-border: rgba(255, 255, 255, 0.1);
+
+  /* Scrollbar */
+  --scrollbar-track: #f1f5f9;
+  --scrollbar-thumb: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+  /* Status */
+  --status-active-bg: rgba(16, 185, 129, 0.12);
+  --status-active-text: #059669;
+  --status-active-border: rgba(16, 185, 129, 0.25);
+  --status-inactive-bg: rgba(239, 68, 68, 0.1);
+  --status-inactive-text: #dc2626;
+  --status-inactive-border: rgba(239, 68, 68, 0.25);
+  --status-pending-bg: rgba(245, 158, 11, 0.1);
+  --status-pending-text: #d97706;
+  --status-pending-border: rgba(245, 158, 11, 0.25);
+
+  /* Specific */
+  --card-radius: 20px;
+  --nav-height: 72px;
+}
+
+[data-theme="dark"] {
+  /* Backgrounds */
+  --bg-primary: #0f0c29;
+  --bg-secondary: #1a1a2e;
+  --bg-page: linear-gradient(135deg, #0f0c29 0%, #1a1a2e 50%, #16213e 100%);
+  --bg-card: rgba(255, 255, 255, 0.05);
+  --bg-card-hover: rgba(255, 255, 255, 0.08);
+  --bg-input: rgba(255, 255, 255, 0.05);
+  --bg-input-hover: rgba(255, 255, 255, 0.08);
+  --bg-navbar: linear-gradient(135deg, rgba(15, 12, 41, 0.95) 0%, rgba(48, 43, 99, 0.95) 50%, rgba(36, 36, 62, 0.95) 100%);
+  --bg-overlay: rgba(255, 255, 255, 0.05);
+  --bg-glass: rgba(255, 255, 255, 0.05);
+
+  /* Text */
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --text-tertiary: rgba(255, 255, 255, 0.4);
+  --text-on-primary: #ffffff;
+
+  /* Borders */
+  --border-color: rgba(255, 255, 255, 0.1);
+  --border-hover: rgba(255, 255, 255, 0.2);
+  --border-focus: #667eea;
+
+  /* Accents (same in both) */
+  --accent-primary: #667eea;
+  --accent-secondary: #764ba2;
+  --accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --accent-green: #43e97b;
+  --accent-green-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  --accent-blue: #4facfe;
+  --accent-blue-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --accent-pink: #f093fb;
+  --accent-pink-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --accent-orange: #f59e0b;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.4);
+  --shadow-accent: 0 4px 15px rgba(102, 126, 234, 0.4);
+
+  /* Chart colors */
+  --chart-grid: rgba(255, 255, 255, 0.1);
+  --chart-text: rgba(255, 255, 255, 0.5);
+  --chart-tooltip-bg: rgba(26, 26, 46, 0.95);
+  --chart-tooltip-border: rgba(255, 255, 255, 0.1);
+
+  /* Scrollbar */
+  --scrollbar-track: rgba(255, 255, 255, 0.05);
+  --scrollbar-thumb: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+  /* Status */
+  --status-active-bg: rgba(56, 161, 105, 0.2);
+  --status-active-text: #68d391;
+  --status-active-border: rgba(56, 161, 105, 0.3);
+  --status-inactive-bg: rgba(239, 68, 68, 0.2);
+  --status-inactive-text: #fc8181;
+  --status-inactive-border: rgba(239, 68, 68, 0.3);
+  --status-pending-bg: rgba(236, 201, 75, 0.2);
+  --status-pending-text: #f6e05e;
+  --status-pending-border: rgba(236, 201, 75, 0.3);
+
+  --card-radius: 20px;
+  --nav-height: 72px;
+}
+
+/* ============================================
+   GLOBAL RESET & BASE
+   ============================================ */
+
 * {
   margin: 0;
   padding: 0;
@@ -13,8 +159,10 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #f7fafc;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   line-height: 1.5;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 code {
@@ -30,7 +178,7 @@ html {
 /* Selection styling */
 ::selection {
   background: rgba(102, 126, 234, 0.3);
-  color: #1a1a2e;
+  color: var(--text-primary);
 }
 
 /* Custom scrollbar */
@@ -40,14 +188,14 @@ html {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: var(--scrollbar-track);
   border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--scrollbar-thumb);
   border-radius: 5px;
-  border: 2px solid #f1f5f9;
+  border: 2px solid var(--scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -56,7 +204,7 @@ html {
 
 /* Focus visible for accessibility */
 :focus-visible {
-  outline: 2px solid #667eea;
+  outline: 2px solid var(--accent-primary);
   outline-offset: 2px;
 }
 
@@ -70,4 +218,20 @@ html {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* ============================================
+   THEME TRANSITION UTILITY
+   ============================================ */
+
+body,
+.navbar,
+.dashboard,
+.customers,
+.leads,
+.contacts,
+.profile-container,
+.login-container,
+.signup-container {
+    transition: background 0.4s ease, color 0.3s ease;
 }

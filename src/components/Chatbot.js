@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { MessageCircle, X, Send, Loader } from 'lucide-react';
+import { MessageCircle, X, Send, Loader, Mic, MicOff, Volume2 } from 'lucide-react';
 import { supabase } from '../config/supabase';
 import { useAuth } from '../context/AuthContext';
+import useVoiceAssistant from '../utils/useVoiceAssistant';
 import './Chatbot.css';
 
 const Chatbot = () => {
@@ -10,7 +11,7 @@ const Chatbot = () => {
     const [messages, setMessages] = useState([
         {
             id: 1,
-            text: "Hi! I'm your Customer Pulse assistant. I can help you with information about your customers, leads, and contacts. What would you like to know?",
+            text: "Hi! I'm your Customer Pulse assistant. I can help you with information about your customers, leads, and contacts. Try typing or using the 🎤 microphone! What would you like to know?",
             sender: 'bot',
             timestamp: new Date()
         }
@@ -23,6 +24,26 @@ const Chatbot = () => {
         contacts: []
     });
     const messagesEndRef = useRef(null);
+    const { isListening, transcript, isSupported, startListening, stopListening, speak } = useVoiceAssistant();
+
+    // Update input when voice transcript changes
+    useEffect(() => {
+        if (transcript) {
+            setInputMessage(transcript);
+        }
+    }, [transcript]);
+
+    // Auto-send when voice recognition stops and we have a transcript
+    useEffect(() => {
+        if (!isListening && transcript && transcript.trim()) {
+            // Small delay to let the UI update
+            const timer = setTimeout(() => {
+                handleSendMessage(transcript);
+            }, 500);
+            return () => clearTimeout(timer);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isListening]);
 
     const fetchUserData = useCallback(async () => {
         try {
@@ -58,6 +79,54 @@ const Chatbot = () => {
 
     const analyzeQuery = (query) => {
         const lowerQuery = query.toLowerCase();
+
+        // Navigation commands
+        if (lowerQuery.includes('navigate') || lowerQuery.includes('go to') || lowerQuery.includes('open')) {
+            if (lowerQuery.includes('dashboard') || lowerQuery.includes('home')) {
+                window.location.href = '/';
+                return { type: 'navigate', response: 'Navigating to Dashboard...' };
+            }
+            if (lowerQuery.includes('customer')) {
+                window.location.href = '/customers';
+                return { type: 'navigate', response: 'Navigating to Customers...' };
+            }
+            if (lowerQuery.includes('lead')) {
+                window.location.href = '/leads';
+                return { type: 'navigate', response: 'Navigating to Leads...' };
+            }
+            if (lowerQuery.includes('contact')) {
+                window.location.href = '/contacts';
+                return { type: 'navigate', response: 'Navigating to Contacts...' };
+            }
+            if (lowerQuery.includes('automation')) {
+                window.location.href = '/automation';
+                return { type: 'navigate', response: 'Navigating to Automation...' };
+            }
+            if (lowerQuery.includes('pricing') || lowerQuery.includes('plan') || lowerQuery.includes('billing')) {
+                window.location.href = '/pricing';
+                return { type: 'navigate', response: 'Navigating to Pricing...' };
+            }
+            if (lowerQuery.includes('profile') || lowerQuery.includes('settings')) {
+                window.location.href = '/profile';
+                return { type: 'navigate', response: 'Navigating to Profile...' };
+            }
+        }
+
+        // Add new commands
+        if (lowerQuery.includes('add new') || lowerQuery.includes('create new')) {
+            if (lowerQuery.includes('customer')) {
+                window.location.href = '/customers/new';
+                return { type: 'navigate', response: 'Opening new customer form...' };
+            }
+            if (lowerQuery.includes('lead')) {
+                window.location.href = '/leads/new';
+                return { type: 'navigate', response: 'Opening new lead form...' };
+            }
+            if (lowerQuery.includes('contact')) {
+                window.location.href = '/contacts/new';
+                return { type: 'navigate', response: 'Opening new contact form...' };
+            }
+        }
 
         // Count queries
         if (lowerQuery.includes('how many') || lowerQuery.includes('total') || lowerQuery.includes('count')) {
@@ -204,74 +273,6 @@ const Chatbot = () => {
             };
         }
 
-        // Email queries
-        if (lowerQuery.includes('email')) {
-            const emailMatch = lowerQuery.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/);
-            if (emailMatch) {
-                const email = emailMatch[1];
-                const customer = userData.customers.find(c => c.email === email);
-                const lead = userData.leads.find(l => l.email === email);
-                const contact = userData.contacts.find(c => c.email === email);
-
-                if (customer) {
-                    return {
-                        type: 'email',
-                        response: `${customer.name} (Customer) - Company: ${customer.company || 'N/A'}, Phone: ${customer.phone || 'N/A'}, Status: ${customer.status}`
-                    };
-                }
-                if (lead) {
-                    return {
-                        type: 'email',
-                        response: `${lead.name} (Lead) - Company: ${lead.company || 'N/A'}, Status: ${lead.status}, Phone: ${lead.phone || 'N/A'}, Score: ${lead.score}`
-                    };
-                }
-                if (contact) {
-                    return {
-                        type: 'email',
-                        response: `${contact.name} (Contact) - Company: ${contact.company || 'N/A'}, Title: ${contact.title || 'N/A'}, Phone: ${contact.phone || 'N/A'}`
-                    };
-                }
-                return {
-                    type: 'email',
-                    response: `No records found for ${email}`
-                };
-            }
-        }
-
-        // Phone queries
-        if (lowerQuery.includes('phone') || lowerQuery.includes('number')) {
-            const phoneMatch = lowerQuery.match(/(\+?\d[\d\s\-()]+)/);
-            if (phoneMatch) {
-                const phone = phoneMatch[1].replace(/[\s\-()]/g, '');
-                const customer = userData.customers.find(c => c.phone && c.phone.replace(/[\s\-()]/g, '').includes(phone));
-                const lead = userData.leads.find(l => l.phone && l.phone.replace(/[\s\-()]/g, '').includes(phone));
-                const contact = userData.contacts.find(c => c.phone && c.phone.replace(/[\s\-()]/g, '').includes(phone));
-
-                if (customer) {
-                    return {
-                        type: 'phone',
-                        response: `${customer.name} (Customer) - Company: ${customer.company || 'N/A'}, Email: ${customer.email}`
-                    };
-                }
-                if (lead) {
-                    return {
-                        type: 'phone',
-                        response: `${lead.name} (Lead) - Company: ${lead.company || 'N/A'}, Email: ${lead.email}, Status: ${lead.status}`
-                    };
-                }
-                if (contact) {
-                    return {
-                        type: 'phone',
-                        response: `${contact.name} (Contact) - Company: ${contact.company || 'N/A'}, Email: ${contact.email}`
-                    };
-                }
-                return {
-                    type: 'phone',
-                    response: `No records found for ${phoneMatch[1]}`
-                };
-            }
-        }
-
         // High score leads
         if (lowerQuery.includes('high score') || lowerQuery.includes('top lead') || lowerQuery.includes('best lead')) {
             const topLeads = userData.leads
@@ -312,16 +313,17 @@ const Chatbot = () => {
         // Default response with suggestions
         return {
             type: 'unknown',
-            response: `I can help you with:\n\n📊 Counts: "How many customers do I have?"\n📈 Status: "What's the status of my leads?"\n🔍 Search: "Find John Smith"\n⏰ Recent: "Show me recent customers"\n🏢 Companies: "What companies do I work with?"\n📧 Email lookup: "Who has email john@example.com?"\n📞 Phone lookup: "Find phone number 555-1234"\n⭐ Top leads: "Show me high score leads"\n📋 Overview: "Give me a summary"\n\nWhat would you like to know?`
+            response: `I can help you with:\n\n📊 Counts: "How many customers do I have?"\n📈 Status: "What's the status of my leads?"\n🔍 Search: "Find John Smith"\n⏰ Recent: "Show me recent customers"\n🏢 Companies: "What companies do I work with?"\n⭐ Top leads: "Show me high score leads"\n📋 Overview: "Give me a summary"\n🧭 Navigate: "Go to customers"\n➕ Create: "Add new lead"\n\nYou can also use the 🎤 microphone button for voice commands!`
         };
     };
 
-    const handleSendMessage = async () => {
-        if (!inputMessage.trim()) return;
+    const handleSendMessage = async (messageText) => {
+        const text = messageText || inputMessage;
+        if (!text.trim()) return;
 
         const userMessage = {
             id: messages.length + 1,
-            text: inputMessage,
+            text: text,
             sender: 'user',
             timestamp: new Date()
         };
@@ -332,7 +334,7 @@ const Chatbot = () => {
 
         // Simulate typing delay for better UX
         setTimeout(() => {
-            const analysis = analyzeQuery(inputMessage);
+            const analysis = analyzeQuery(text);
             const botMessage = {
                 id: messages.length + 2,
                 text: analysis.response,
@@ -342,6 +344,11 @@ const Chatbot = () => {
 
             setMessages(prev => [...prev, botMessage]);
             setIsTyping(false);
+
+            // Speak the response if voice was used
+            if (messageText && isSupported) {
+                speak(analysis.response.replace(/[•\n📊📈🔍⏰🏢⭐📋🧭➕🎤]/g, '').substring(0, 200));
+            }
         }, 800);
     };
 
@@ -349,6 +356,14 @@ const Chatbot = () => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             handleSendMessage();
+        }
+    };
+
+    const toggleVoice = () => {
+        if (isListening) {
+            stopListening();
+        } else {
+            startListening();
         }
     };
 
@@ -408,15 +423,27 @@ const Chatbot = () => {
                     </div>
 
                     <div className="chatbot-input">
+                        {/* Voice button */}
+                        {isSupported && (
+                            <button
+                                onClick={toggleVoice}
+                                className={`voice-btn ${isListening ? 'listening' : ''}`}
+                                title={isListening ? 'Stop listening' : 'Start voice input'}
+                            >
+                                {isListening ? <MicOff size={18} /> : <Mic size={18} />}
+                                {isListening && <span className="voice-pulse"></span>}
+                            </button>
+                        )}
                         <input
                             type="text"
-                            placeholder="Ask me anything about your CRM data..."
+                            placeholder={isListening ? "Listening..." : "Ask me anything about your CRM data..."}
                             value={inputMessage}
                             onChange={(e) => setInputMessage(e.target.value)}
                             onKeyPress={handleKeyPress}
+                            className={isListening ? 'listening-input' : ''}
                         />
                         <button
-                            onClick={handleSendMessage}
+                            onClick={() => handleSendMessage()}
                             disabled={!inputMessage.trim()}
                             className="send-btn"
                         >
